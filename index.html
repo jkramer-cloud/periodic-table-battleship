@@ -36,7 +36,7 @@
 </head>
 <body>
 <div class="shell">
-<header class="top"><div><div class="overline">NACHES LEARNING HUB · SCIENCE</div><div class="logo">⚛ PERIODIC TABLE <span>BATTLESHIP</span></div></div><div class="top-actions"><span class="tag" id="phaseBadge">SCIENCE FLEET</span><span class="tag">v3 · BOLD PATTERN FLEETS</span><button type="button" id="resetBtn" class="btn ghost" hidden>New game</button></div></header>
+<header class="top"><div><div class="overline">NACHES LEARNING HUB · SCIENCE</div><div class="logo">⚛ PERIODIC TABLE <span>BATTLESHIP</span></div></div><div class="top-actions"><span class="tag" id="phaseBadge">SCIENCE FLEET</span><span class="tag">v4 · CHEMISTRY REASONING</span><button type="button" id="resetBtn" class="btn ghost" hidden>New game</button></div></header>
 <main id="app" aria-live="polite"></main>
 <footer class="footer">118 real elements · Original classroom game · No accounts or external services · Shared-device pass-and-play</footer>
 </div>
@@ -63,7 +63,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const rand=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
 const player=(name,computer)=>({name,computer,ships:[],shots:{},sunkKnown:[],turnShots:0});
-function settings(){return `<section class="welcome"><div class="intro"><div><div class="overline">SCIENCE MISSION · SELECT THE FLEET</div><h1>Master the elements.<br><span style="color:#ffda85">Find the fleet.</span></h1><p>A real periodic table becomes your ocean. Hide named, color-coded ships across neighboring elements. Choose your own target on every turn, then solve chemistry questions or identification clues to fire.</p><div class="tag">⚓ 1 player versus computer · 2 players pass &amp; play</div></div><div class="atom-art" aria-hidden="true">⚛</div></div><div class="card" style="margin-top:16px"><h2>Game setup</h2><div class="setup-grid">
+function settings(){return `<section class="welcome"><div class="intro"><div><div class="overline">SCIENCE MISSION · SELECT THE FLEET</div><h1>Master the elements.<br><span style="color:#ffda85">Find the fleet.</span></h1><p>A real periodic table becomes your ocean. Hide named, color-coded ships across neighboring elements. Choose your own target on every turn, then solve chemistry questions or reasoning clues to fire.</p><div class="tag">⚓ 1 player versus computer · 2 players pass &amp; play</div></div><div class="atom-art" aria-hidden="true">⚛</div></div><div class="card" style="margin-top:16px"><h2>Game setup</h2><div class="setup-grid">
 <label class="field">Learning level<select id="level"><option value="explorer" ${CFG.level==='explorer'?'selected':''}>Explorer — Grades 3–5</option><option value="scientist" ${CFG.level==='scientist'?'selected':''}>Scientist — Grades 5–6</option><option value="chemist" ${CFG.level==='chemist'?'selected':''}>Chemist — Grades 7–8</option><option value="master" ${CFG.level==='master'?'selected':''}>Master Chemist — Grades 9–12</option></select></label>
 <label class="field">Playable elements<select id="coverage">${[20,36,54,118].map(n=>`<option value="${n}" ${+CFG.coverage===n?'selected':''}>${n===118?'All 118, including f-block':'First '+n+' elements'}</option>`).join('')}</select></label>
 <label class="field">Opponent<select id="opponent"><option value="computer" ${CFG.opponent==='computer'?'selected':''}>Solo vs computer</option><option value="human" ${CFG.opponent==='human'?'selected':''}>Two players · Pass &amp; play</option></select></label>
@@ -75,7 +75,7 @@ function settings(){return `<section class="welcome"><div class="intro"><div><di
  <label class="field">First player name<input maxlength="30" id="p1" value="${esc(CFG.p1)}" placeholder="Player 1"></label>
 <label class="field">Second player name<input maxlength="30" id="p2" value="${esc(CFG.p2)}" placeholder="Player 2"></label>
 </div><label class="check"><input type="checkbox" id="reference" ${CFG.reference?'checked':''}> Enable study reference (element names on Explorer tiles)</label><div class="info-strip" id="levelHint">${esc(TIERS[CFG.level].desc)}. Ships may be placed only across neighboring active element tiles.</div><div class="btnrow"><button class="btn" data-action="begin">⚓ Begin fleet placement</button></div></div>
-<div class="card rules" style="margin-top:14px"><h3>How to play</h3><ul><li><b>Place ships</b> horizontally or vertically across adjacent playable tiles of the periodic table. Empty spaces and the separation above the lanthanides/actinides cannot hold ships.</li><li><b>Click attacks:</b> Pick an element on the enemy grid, then answer a question to fire at that tile.</li><li><b>Clue attacks:</b> First choose <em>any untried element</em> to target. Then solve an identification clue to fire at your chosen square. You always control where to shoot.</li><li><b>Mixed attacks:</b> Alternate science questions and element-identification clues. Sink every named vessel, including the optional one-tile SEAL Team Operator, to win.</li><li>For two players, pass the Chromebook when the privacy screen appears. The game does not save or send student data.</li></ul></div></section>`;}
+<div class="card rules" style="margin-top:14px"><h3>How to play</h3><ul><li><b>Place ships</b> horizontally or vertically across adjacent playable tiles of the periodic table. Empty spaces and the separation above the lanthanides/actinides cannot hold ships.</li><li><b>Click attacks:</b> Pick an element on the enemy grid, then answer a question to fire at that tile.</li><li><b>Clue attacks:</b> First choose <em>any untried element</em> to target. Then solve a reasoning clue about its chemistry to fire at your chosen square. You always control where to shoot.</li><li><b>Mixed attacks:</b> Alternate science questions and chemistry reasoning clues. Sink every named vessel, including the optional one-tile SEAL Team Operator, to win.</li><li>For two players, pass the Chromebook when the privacy screen appears. The game does not save or send student data.</li></ul></div></section>`;}
 function collectSettings(){for(let key of ['level','opponent','attack','difficulty','ai','operator','p1','p2']){const el=document.getElementById(key);if(el)CFG[key]=el.value.trim()||CFG[key]};for(let key of ['coverage','timer'])CFG[key]=+document.getElementById(key).value;CFG.reference=document.getElementById('reference').checked;if(CFG.difficulty==='nightmare'&&(CFG.timer===0||CFG.timer>15))CFG.timer=15;}
 function pathsFor(size,orient){const key=available.length+'-'+size+'-'+orient;if(allPathsMemo[key])return allPathsMemo[key];const paths=[];for(const e of available){let path=[];for(let t=0;t<size;t++){const z=POS[`${e.row+(orient==='v'?t:0)}-${e.col+(orient==='h'?t:0)}`];if(!z||!availableSet.has(z))break;path.push(z)}if(path.length===size)paths.push(path)}return allPathsMemo[key]=paths;}
 function fits(z,len,orient,occupied){const e=BY_Z[z],cells=[];if(!e)return null;for(let i=0;i<len;i++){const p=POS[`${e.row+(orient==='v'?i:0)}-${e.col+(orient==='h'?i:0)}`];if(!p||!availableSet.has(p)||occupied.has(p))return null;cells.push(p)}return cells;}
@@ -137,10 +137,10 @@ function playContent(){
  const homeboard=board({mode:'home',ships:p.ships,shots:opp.shots,interactive:false});
  let action='';
  if(phase==='playing')action=`<div class="notice gold"><b>Choose any untried element to attack.</b> ${clueMode?'You will solve an element-identity clue about your chosen target before firing.':'You will answer a chemistry question about your chosen target before firing.'}</div>`;
- else if(phase==='question')action=`<div class="question"><div class="kicker">${clueMode?'IDENTIFY YOUR CHOSEN TARGET':'ELEMENT SCIENCE CHALLENGE'} · ${esc(BY_Z[question.z].s)} TARGET</div><h3>${esc(question.prompt)}</h3>${question.options.map((x,i)=>`<button type="button" class="answer" data-choice="${i}">${String.fromCharCode(65+i)}. ${esc(x)}</button>`).join('')}<button type="button" class="btn ghost retarget" data-action="changeTarget">↩ Choose a different target</button></div>`;
+ else if(phase==='question')action=`<div class="question"><div class="kicker">${esc(question.skill)} · ${esc(BY_Z[question.z].s)} TARGET</div><h3>${esc(question.prompt)}</h3>${question.options.map((x,i)=>`<button type="button" class="answer" data-choice="${i}">${String.fromCharCode(65+i)}. ${esc(x)}</button>`).join('')}<button type="button" class="btn ghost retarget" data-action="changeTarget">↩ Choose a different target</button></div>`;
  const note=feedback?`<div class="notice bad" role="status">${esc(feedback)}</div>`:'';
  const timer=deadline>0&&phase==='question'?`<div id="timerWrap" class="notice gold"><div style="display:flex;justify-content:space-between"><b>Timed fire</b><b id="countdown">${Math.ceil((deadline-Date.now())/1000)} s</b></div><div class="meter"><div id="timerBar"></div></div></div>`:'';
- return `<div class="play"><section class="leftcol"><div class="card board-card">${titleBar('🎯 Enemy Waters — Choose an Element',`${fired} attacks recorded`)}<div class="hint">Choose your own target on every turn. ${clueMode?'Clues no longer force a random firing location.':'Answer science questions to fire.'} Red ✕ = hit; dark · = miss.</div>${mainboard}<div class="legend"><span><i class="dot hit"></i>Hit</span><span><i class="dot miss"></i>Miss</span><span><i class="dot available"></i>Unfired element</span></div></div><div class="card board-card small-board">${titleBar('🛡 Your Fleet',ownShipStats(p))}${homeboard}<div class="hint" style="margin-top:9px">Your named, color-coded vessels:</div>${fleetChips(p)}</div></section><aside class="sidebar"><div class="card"><div class="turn-label">${esc(p.name)}'S TURN · ${clueMode?'TARGET & IDENTIFY':'TARGET & ANSWER'}</div><div class="bigline">${phase==='playing'?'Choose your target':clueMode?'Solve the identification clue':'Solve the science challenge'}</div><div class="statgrid"><div class="statbox"><b>${Object.values(p.shots).filter(s=>s==='hit').length}</b>Enemy tiles hit</div><div class="statbox"><b>${ownShipStats(opp)}</b>Enemy fleet left</div></div>${action}${note}${timer}<div class="hint">${esc(CHALLENGES[CFG.difficulty])}. ${CFG.attack==='mixed'?'Mixed mode alternates chemistry and identification questions.':''}</div></div>${referencePanel()}</aside></div>`;
+ return `<div class="play"><section class="leftcol"><div class="card board-card">${titleBar('🎯 Enemy Waters — Choose an Element',`${fired} attacks recorded`)}<div class="hint">Choose your own target on every turn. ${clueMode?'Reasoning clues no longer force a random firing location.':'Answer science questions to fire.'} Red ✕ = hit; dark · = miss.</div>${mainboard}<div class="legend"><span><i class="dot hit"></i>Hit</span><span><i class="dot miss"></i>Miss</span><span><i class="dot available"></i>Unfired element</span></div></div><div class="card board-card small-board">${titleBar('🛡 Your Fleet',ownShipStats(p))}${homeboard}<div class="hint" style="margin-top:9px">Your named, color-coded vessels:</div>${fleetChips(p)}</div></section><aside class="sidebar"><div class="card"><div class="turn-label">${esc(p.name)}'S TURN · ${clueMode?'TARGET & IDENTIFY':'TARGET & ANSWER'}</div><div class="bigline">${phase==='playing'?'Choose your target':clueMode?'Solve the chemistry reasoning clue':'Solve the science challenge'}</div><div class="statgrid"><div class="statbox"><b>${Object.values(p.shots).filter(s=>s==='hit').length}</b>Enemy tiles hit</div><div class="statbox"><b>${ownShipStats(opp)}</b>Enemy fleet left</div></div>${action}${note}${timer}<div class="hint">${esc(CHALLENGES[CFG.difficulty])}. ${CFG.attack==='mixed'?'Mixed mode alternates chemistry challenges and reasoning clues.':''}</div></div>${referencePanel()}</aside></div>`;
 }
 function referencePanel(){if(!CFG.reference)return `<div class="card hint"><b>Study reference hidden</b><p>To use element names and the reference sheet, enable the reference option at setup.</p></div>`;return `<details class="reference"><summary>📘 Periodic table study reference</summary><p>Use this when learning. Atomic weights shown in u; for radioactive elements, the mass shown may refer to a representative isotope rather than a standard atomic weight.</p><input type="search" id="refFilter" placeholder="Filter by name, symbol, number…" aria-label="Search element reference"><div class="reference-list" id="refList">${available.map(e=>`<div data-ref="${esc((e.name+' '+e.s+' '+e.z).toLowerCase())}"><b>${e.z}. ${esc(e.s)}</b> ${esc(e.name)} <span style="color:#aacddd">${e.mass}</span></div>`).join('')}</div></details>`;}
 function interstitial(){const target=players[active]?.name||'Player';return `<div class="shield card"><div class="badge-emoji" aria-hidden="true">🔒</div><div class="overline">PRIVATE SCREEN · PASS & PLAY</div><h2>Pass the device to ${esc(target)}</h2><p class="desc">Previous player: look away. Only ${esc(target)} should continue. The other player's fleet stays hidden.</p><button class="btn" data-action="unshield">I'm ${esc(target)} — Continue →</button></div>`;}
@@ -157,43 +157,116 @@ function startClock(){
  }
 }
 function tick(){if(!deadline)return;const ms=deadline-Date.now();const bar=document.getElementById('timerBar'),count=document.getElementById('countdown');if(bar)bar.style.width=Math.max(0,100*ms/(1000*(CFG.difficulty==='nightmare'?15:CFG.timer)))+'%';if(count)count.textContent=Math.max(0,Math.ceil(ms/1000))+' s';if(ms<=0){clearInterval(timerHandle);timerHandle=null;deadline=0;endShot('⏱ Time expired. The attack did not fire.',false,false)}}
-function allDifferent(correct,pool){const uniq=[...new Set(pool.map(String))].filter(a=>a!==String(correct));const picks=shuffle(uniq).slice(0,2);while(picks.length<2)picks.push(correct+'?'+picks.length);const a=shuffle([String(correct),...picks]);return {options:a,correctIndex:a.indexOf(String(correct))}}
-function buildQuestion(e){const tier=CFG.level;const canMass=e.stableMass;const kinds=tier==='explorer'?['name','symbol','atomic','name']:tier==='scientist'?['name','atomic','period','symbol','group','family']:tier==='chemist'?['atomic','family','period','group',...(canMass?['mass']:[]),'symbol','name']:['family','group','period',...(canMass?['mass']:[]),'valence','atomic','name','symbol'];let kind=rand(kinds);if(kind==='valence'&&!(e.group===1||e.group===2||e.group>=13)&&e.z!==2)kind='period';if(kind==='family'&&['Other element','Post-transition metal','Metalloid','Nonmetal'].includes(e.cat))kind='period';if(kind==='group'&&e.group===0)kind='family';const peers=available.filter(x=>x.z!==e.z);let prompt='',correct='',pool=[],hint='',why='';
-if(kind==='name'){prompt=`Which element is represented by the symbol ${e.s}?`;correct=e.name;pool=peers.map(x=>x.name);hint='The symbol may be one or two letters; compare it with the name in the study reference.';why=`${e.s} is the chemical symbol for ${e.name}.`}
-else if(kind==='symbol'){prompt=`Which symbol belongs to ${e.name}?`;correct=e.s;pool=peers.map(x=>x.s);hint='A chemical symbol begins with a capital letter; a second letter is lowercase.';why=`The correct symbol for ${e.name} is ${e.s}.`}
-else if(kind==='atomic'){prompt=`What is the atomic number of ${e.name} (${e.s})?`;correct=String(e.z);pool=peers.filter(x=>Math.abs(x.z-e.z)<=13).map(x=>String(x.z));hint='The atomic number equals the number of protons in one atom.';why=`${e.name} has ${e.z} protons, so its atomic number is ${e.z}.`}
-else if(kind==='period'){prompt=`Which period (horizontal row) contains ${e.name} (${e.s})?`;correct=String(e.period);pool=[1,2,3,4,5,6,7].filter(x=>x!==e.period).map(String);hint='Periods are numbered 1–7 from top to bottom; the f-block belongs to periods 6 and 7.';why=`${e.name} belongs to Period ${e.period}.`}
-else if(kind==='group'){prompt=`Which group (vertical column) contains ${e.name} (${e.s})?`;correct=String(e.group);pool=[e.group-2,e.group-1,e.group+1,e.group+2,1,2,13,17,18].filter(x=>x>=1&&x<=18&&x!==e.group).map(String);hint='Group numbers run 1–18 across the top of the standard periodic table.';why=`${e.name} is in Group ${e.group}.`}
-else if(kind==='family'){prompt=`Which element family best describes ${e.name} (${e.s})?`;correct=e.cat;pool=['Alkali metal','Alkaline earth metal','Halogen','Noble gas','Transition metal','Lanthanide','Actinide','Metalloid','Nonmetal'];hint=`Check ${e.name}'s location: Group 1 (except H), Group 2, Group 17, Group 18, the d-block, or the two detached series.`;why=`${e.name} is classified as a ${e.cat.toLowerCase()}.`}
-else if(kind==='mass'){prompt=`What is the approximate atomic weight of ${e.name} (${e.s}), rounded to the nearest whole u?`;correct=String(Math.round(e.mass));pool=[...peers.filter(x=>x.stableMass&&Math.abs(x.mass-e.mass)<22).map(x=>String(Math.round(x.mass))),String(Math.round(e.mass)+8),String(Math.max(1,Math.round(e.mass)-8))];hint='Atomic weight is measured in unified atomic mass units (u), not the same as atomic number.';why=`${e.name}'s standard atomic weight is approximately ${e.mass} u, or ${Math.round(e.mass)} u when rounded.`}
-else if(kind==='valence'){let value=e.z===2?2:e.group<=2?e.group:e.group-10;prompt=`How many valence electrons does a neutral ${e.name} atom have in the usual main-group model?`;correct=String(value);pool=[1,2,3,4,5,6,7,8].filter(x=>x!==value).map(String);hint='For a main-group element, Group 1 has one valence electron, Group 2 has two, and Groups 13–18 usually have 3–8. Helium has two.';why=`${e.name} has ${value} valence electron${value===1?'':'s'} in the usual main-group model.`}
-const {options,correctIndex}=allDifferent(correct,pool);return {z:e.z,kind,prompt,options,correctIndex,hint,why}}
-function buildClueQuestion(e){
- const tier=CFG.level;const peers=available.filter(other=>other.z!==e.z);
- let clue='',hint='';const kind=rand(tier==='explorer'?['symbol','number','symbol']:
- tier==='scientist'?['number','location','symbol','family']:
- ['location','properties','number','family','symbol']);
- if(kind==='symbol'){
-  clue=`My chemical symbol is ${e.s}. Which element am I?`;
-  hint='A chemical symbol uses one or two letters; match it to an element name.';
- }else if(kind==='location'&&e.group){
-  clue=`I live in Period ${e.period} and Group ${e.group} on the periodic table. Which element am I?`;
-  hint='Follow the horizontal period and vertical group to their intersection.';
- }else if(kind==='properties'){
-  clue=`I am a ${e.cat.toLowerCase()} in Period ${e.period}. My atomic number is ${e.z}. Which element am I?`;
-  hint='The number of protons gives away the atomic number; check the family and row too.';
- }else if(kind==='family'){
-  clue=`I have ${e.z} protons and belong to the ${e.cat.toLowerCase()} family. Which element am I?`;
-  hint='Each atomic number belongs to only one element.';
- }else{
-  clue=`I have atomic number ${e.z}, so I have ${e.z} protons. Which element am I?`;
-  hint='Read the small atomic numbers on the element tiles.';
- }
- const close=peers.filter(x=>Math.abs(x.z-e.z)<14);
- const pool=[...close,...peers].map(x=>x.name);
- const {options,correctIndex}=allDifferent(e.name,pool);
- return {z:e.z,kind:'clue',prompt:clue,options,correctIndex,hint,why:`${e.name} (${e.s}) has atomic number ${e.z} and belongs to Period ${e.period}. Your selected attack is ${e.s}.`};
+/* v4: tiered evidence-based chemistry question generator.
+   NGSS concept alignment (practice, not a full assessment): MS-PS1-1; HS-PS1-1/2.
+   All questions use the targeted element, but no element name is given away by a random clue.
+*/
+function shuffledQuestion(z,kind,skill,prompt,correct,wrong,hint,why){
+ const answer=String(correct);
+ const others=[...new Set(wrong.map(x=>String(x)))].filter(x=>x!==answer).slice(0,3);
+ if(others.length!==3)throw Error(`Insufficient distractors for ${kind}: ${answer} | ${wrong}`);
+ const options=shuffle([answer,...others]);
+ return {z,kind,skill,prompt,options,correctIndex:options.indexOf(answer),hint,why};
 }
+const normalMass=e=>Math.max(e.z,Math.round(e.mass));
+const groupFamily=(e)=>e.group===1&&e.z!==1?'alkali metals':e.group===2?'alkaline earth metals':e.group===17?'halogens':e.group===18?'noble gases':e.group===0?e.cat.toLowerCase():e.cat.toLowerCase()+'s';
+const isMain=e=>[1,2,13,14,15,16,17,18].includes(e.group);
+const members=e=>available.filter(x=>x.z!==e.z&&x.group===e.group&&e.group>0);
+const moreReactivity=(a,b)=>a.group===1?a.period>b.period?a:b:a.period<b.period?a:b;
+const near=e=>available.filter(x=>x.z!==e.z&&Math.abs(x.z-e.z)<=8);
+const numWrong=(n)=>[n+1,n-1,n+2,n-2,n+3,n-3].filter(x=>x>=0).map(String);
+const label=(e)=>`${e.name} (${e.s})`;
+const subscript=t=>String(t).replace(/[0-9]/g,d=>'₀₁₂₃₄₅₆₇₈₉'[+d]);
+const chemical=(s,n)=>s+(n===1?'':subscript(n));
+const modelKinds={
+ name:(e)=>{const peers=[...near(e),...available.filter(x=>x.s[0]===e.s[0])].filter(x=>x!==e);if(peers.length<3)return null;
+   return shuffledQuestion(e.z,'name','ELEMENT IDENTIFICATION',`A laboratory vial is marked ${e.s}. Which name belongs on its label?`,e.name,shuffle(peers).map(x=>x.name),`Compare the capital letters and any lowercase letters in the symbol.`,`${e.s} is the approved symbol for ${e.name}.`);},
+ symbol:(e)=>{const similar=[...near(e),...available.filter(x=>x.s[0]===e.s[0])].filter(x=>x.z!==e.z);if(similar.length<3)return null;
+   return shuffledQuestion(e.z,'symbol','ELEMENT IDENTIFICATION',`A student must label a sample of ${e.name}. Which symbol is correct?`,e.s,shuffle(similar).map(x=>x.s),`Check the symbol carefully; some symbols come from historical names.`,`${e.name} is represented by ${e.s}.`);},
+ atomic:(e)=>shuffledQuestion(e.z,'atomic','ATOMIC STRUCTURE',`A researcher observes an atom of ${e.name} with atomic number ${e.z}. Which claim must be true?`,`${e.z} protons`,[`${e.z} neutrons`,`${e.z} electron shells`,`${e.z} different isotopes`],`Atomic number is defined by the number of protons, not neutrons or shells.`,`All atoms of ${e.name} contain ${e.z} protons.`),
+ neutral:(e)=>shuffledQuestion(e.z,'neutral','ATOMIC STRUCTURE',`A neutral atom of ${e.name} has ${e.z} protons. Which particle count is consistent with a neutral atom?`,`${e.z} electrons`,[`${e.z+1} electrons`,`${Math.max(0,e.z-1)} electrons`,`${e.z+2} electrons`],`A neutral atom has equal numbers of protons and electrons.`,`Its ${e.z} positive proton charges balance ${e.z} negative electron charges.`),
+ neighbor:(e)=>{const delta=e.z<118?1:-1,other=available.find(x=>x.z===e.z+delta);if(!other)return null;
+  const wrong=[...available.filter(x=>x.z!==other.z&&Math.abs(x.z-other.z)<=4)].map(x=>x.name);if(wrong.length<3)return null;
+  return shuffledQuestion(e.z,'neighbor','PERIODIC SEQUENCE',`One position ${delta>0?'after':'before'} ${e.name} in atomic-number order is which element?`,other.name,shuffle(wrong),`Atomic numbers increase by exactly one from element to element.`,`Element ${other.z} is ${other.name}; ${e.name} is element ${e.z}.`);},
+ family:(e)=>{const actual=e.cat;const choices=['Alkali metal','Alkaline earth metal','Transition metal','Halogen','Noble gas','Metalloid','Nonmetal','Post-transition metal','Lanthanide','Actinide'];
+  const related=actual==='Noble gas'?['Halogen','Nonmetal','Alkali metal']:actual==='Halogen'?['Noble gas','Nonmetal','Alkali metal']:actual==='Metalloid'?['Nonmetal','Post-transition metal','Transition metal']:actual==='Lanthanide'?['Actinide','Transition metal','Post-transition metal']:actual==='Actinide'?['Lanthanide','Transition metal','Post-transition metal']:actual==='Nonmetal'?['Metalloid','Halogen','Noble gas']:actual==='Alkali metal'?['Alkaline earth metal','Transition metal','Post-transition metal']:actual==='Alkaline earth metal'?['Alkali metal','Transition metal','Post-transition metal']:['Post-transition metal','Transition metal','Metalloid','Alkaline earth metal'];
+  return shuffledQuestion(e.z,'family','PERIODIC CLASSIFICATION',`A scientist sorts ${e.name} by its position and chemical family. Where does it belong?`,actual,[...new Set([...related,...choices])],`Check the part of the table where ${e.s} sits, not just the element's name.`,`The periodic table classifies ${e.name} as a ${actual.toLowerCase()}.`);},
+ period:(e)=>shuffledQuestion(e.z,'period','READING THE PERIODIC TABLE',`A scientist groups elements by the same main electron-shell level. Which period contains ${e.name}?`,e.period,[e.period-1,e.period+1,e.period+2,e.period-2,1,7].filter(x=>x>=1&&x<=7),`Period numbers label horizontal rows. The lanthanides and actinides belong to periods 6 and 7.`,`${e.name} is in Period ${e.period}.`),
+ group:(e)=>{if(!e.group)return null;return shuffledQuestion(e.z,'group','PERIODIC PATTERNS',`Which numbered group contains ${e.name}, helping explain similarities with elements above or below it?`,e.group,[e.group-1,e.group+1,e.group-2,e.group+2,1,2,17,18].filter(x=>x>=1&&x<=18),`Groups are vertical columns numbered 1 through 18.`,`${e.name} is in Group ${e.group}.`);},
+ isotope:(e)=>{const m=normalMass(e),n=m-e.z;let wrong=[...numWrong(n),e.z,m].filter(x=>+x>=0);
+  return shuffledQuestion(e.z,'isotope','ISOTOPES & NUCLEI',`An isotope model of ${e.name} contains ${e.z} protons and has mass number ${m}. How many neutrons does it show?`,n,wrong,`Neutrons = mass number − atomic number. Do not confuse mass number with average atomic weight.`,`Mass number ${m} minus ${e.z} protons gives ${n} neutrons in this isotope model.`);},
+ ion:(e)=>{const typicalGain=[15,16,17].includes(e.group)&&e.z<=54;const lost=e.z>1&&e.z%2===0?2:1,charge=typicalGain?'gained':'lost',count=e.z<3?1:typicalGain?e.group===17?1:e.group===16?2:3:lost;
+  const ans=charge==='lost'?e.z-count:e.z+count;
+  return shuffledQuestion(e.z,'ion','IONS & ELECTRONS',`In a particle model, a neutral ${e.name} atom ${charge==='lost'?'loses':'gains'} ${count} electron${count>1?'s':''}. How many electrons does the resulting ion contain?`,ans,numWrong(ans),`Only the electron count changes when an ion forms; the number of protons stays ${e.z}.`,`The neutral atom started with ${e.z} electrons. It ${charge==='lost'?'lost':'gained'} ${count}, leaving ${ans}.`);},
+ shell:(e)=>shuffledQuestion(e.z,'shell','ATOMIC MODELS',`A simplified shell model is made for ${e.name}. How many occupied principal energy levels would the model show?`,e.period,[e.period-1,e.period+1,e.period+2,e.period-2,1,7].filter(x=>x>=1&&x<=7),`For a ground-state atom, its period indicates the highest occupied principal energy level.`,`Because ${e.name} is in Period ${e.period}, its highest occupied principal energy level is ${e.period}.`),
+ atoms:(e)=>{const other=e.s==='O'?'N':'O',p=e.z%2+2,q=e.z%3+2,count=2;
+  const formula=chemical(e.s,p)+chemical(other,q);
+  const n=p*count;
+  return shuffledQuestion(e.z,'atoms','MOLECULE MODELS',`A hypothetical particle has formula ${formula}. A model shows ${count} of these particles. How many ${e.s} atoms are represented in total?`,n,[p,q*count,p+q*count,n+1,n-1].filter(x=>x>=0),`Read the subscript on ${e.s}, then multiply by the number of particles. The model is hypothetical, not necessarily a stable compound.`,`There are ${p} ${e.s} atoms per particle, so ${count} particles contain ${count} × ${p} = ${n} ${e.s} atoms.`);},
+ isotopeVsIon:(e)=>shuffledQuestion(e.z,'isotopeVsIon','SCIENTIFIC REASONING',`Two samples of ${e.name} have the same number of protons but different numbers of neutrons. What does this evidence indicate?`,'They are isotopes of the same element',[
+ 'They are different elements','One sample must be a positive ion','Their atomic numbers must be different'],`Identity depends on protons; isotopes differ in neutrons.`,`Both remain ${e.name} because the proton count is unchanged. They are different isotopes.`),
+ massModel:(e)=>e.stableMass?
+   shuffledQuestion(e.z,'massModel','MEASUREMENT & EVIDENCE',`The periodic-table entry for ${e.name} lists an atomic weight near ${e.mass} u, and an atomic number of ${e.z}. Which explanation best distinguishes them?`,'Atomic number counts protons; atomic weight describes average atomic mass',[
+ 'Atomic number counts neutrons; atomic weight counts electrons','Both numbers always count exactly the same particles','Atomic weight is the number of protons in every isotope'],`The whole-number atomic number identifies the element; atomic weights often reflect a mixture of isotopes.`,`Atomic number is ${e.z} protons. Atomic weight is a mass measure, not a proton or neutron count.`):
+   shuffledQuestion(e.z,'massModel','MEASUREMENT & EVIDENCE',`A reference lists ${e.name}'s atomic number as ${e.z}, and mass number ${Math.round(e.mass)} for a representative isotope. What is the difference between these numbers?`,'Atomic number counts protons; mass number counts protons plus neutrons',[
+ 'Atomic number counts neutrons; mass number counts only electrons','Both numbers always count the atom’s electrons','Atomic number gives electron shells; mass number gives protons'],`For elements without a standard atomic weight, references sometimes show a representative isotope mass number.`,`Atomic number is the proton count. The mass number of an isotope is protons plus neutrons.`),
+ groupAnalogy:(e)=>{if(e.group===0||e.z===1||e.group===1&&e.z===1)return null;const same=members(e).filter(x=>x.z!==1),different=available.filter(x=>x.group!==e.group&&x.z!==e.z);
+   if(!same.length||different.length<3)return null;const peer=rand(same);
+   const distract=shuffle(different).slice(0,3).map(x=>x.name);
+   return shuffledQuestion(e.z,'groupAnalogy','REPEATING PATTERNS',`A student wants an element in the same vertical group as ${e.name}. Which choice should the student investigate?`,peer.name,distract,`Locate ${e.s}, then follow its column up or down.`,`Both ${e.name} and ${peer.name} are in Group ${e.group}, so their outer-electron patterns can be related.`);},
+ valence:(e)=>{if(!isMain(e))return null;
+  const n=e.z===2?2:e.group<=2?e.group:e.group-10;
+  return shuffledQuestion(e.z,'valence','OUTER ELECTRONS',`In the main-group model, how many valence electrons does neutral ${e.name} have?`,n,[n-1,n+1,n+2,n-2,8,2,1,6].filter(x=>x>=1&&x<=8),`Group 1 has 1, Group 2 has 2, and Groups 13–18 usually have 3–8; helium has 2.`,`The group of ${e.name} indicates ${n} outer-shell electron${n===1?'':'s'} in this model.`);},
+ charge:(e)=>{const charges={1:1,2:2,13:3,15:-3,16:-2,17:-1};if(!charges[e.group]||e.z===1||e.z>54||e.group===13&&e.z!==13||e.group===15&&e.z>15)return null;
+  const n=charges[e.group],f=x=>x>0?`${x}+`:`${Math.abs(x)}−`;
+  return shuffledQuestion(e.z,'charge','ION FORMATION',`Using a common main-group ion model, what charge is predicted when ${e.name} forms a simple monatomic ion?`,f(n),[f(-n),f(n>0?n+1:n-1),f(n>0?n===1?3:n-1:n===-1?-3:n+1),f(n>0?-n-1:-n+1)],`Use its valence-electron pattern to predict loss or gain of electrons.`,`The simplified model predicts ${f(n)} for ${e.name} (Group ${e.group}).`);},
+ ionic:(e)=>{const charges={1:1,2:2,13:3,15:-3,16:-2,17:-1};if(!charges[e.group]||e.z===1||e.z>54||e.group===13&&e.z!==13||e.group===15&&e.z>15)return null;
+  const charge=charges[e.group],p=Math.abs(charge),anion=charge<0,partner=anion?'Na':'Cl',left=anion?'Na':e.s,right=anion?e.s:'Cl',c=anion?1:p,an=anion?p:1;
+  const g=(a,b)=>{let x=a,y=b;while(y)[x,y]=[y,x%y];return x;};const gcd=g(c,an),leftN=an/gcd,rightN=c/gcd;
+  const formula=chemical(left,leftN)+chemical(right,rightN);
+  const distract=[chemical(left,rightN)+chemical(right,leftN),chemical(left,leftN+1)+chemical(right,rightN),chemical(left,leftN)+chemical(right,rightN+1),chemical(left,1)+chemical(right,1),chemical(left,Math.max(1,leftN-1))+chemical(right,rightN+1),chemical(left,3)+chemical(right,1),chemical(left,1)+chemical(right,3)];
+  return shuffledQuestion(e.z,'ionic','CHEMICAL FORMULAS',`Predict the simplest charge-balanced formula for a compound containing ${e.name} and ${partner==='Na'?'sodium':'chlorine'}, using common simple-ion charges.`,formula,distract,`The sum of positive and negative charges must be zero, using the smallest whole-number ratio.`,`The ion charges are ${charge>0?'+'+charge:charge} and ${anion?'+1':'−1'}; the smallest neutral ratio is ${formula}.`);},
+ radius:(e)=>{if(!isMain(e)||e.group===0||e.group===18||e.z===1||e.z>54)return null;
+  const peers=members(e).filter(x=>x.z!==1&&x.z<=54);if(!peers.length)return null;const other=rand(peers),larger=e.period>other.period?e:other,smaller=larger===e?other:e;
+  return shuffledQuestion(e.z,'radius','PERIODIC TRENDS',`Two elements share Group ${e.group}: ${e.name} (Period ${e.period}) and ${other.name} (Period ${other.period}). Which prediction best follows the general trend in atomic radius?`,`${larger.name} has the larger atomic radius`,[`${smaller.name} has the larger atomic radius`,'Both must have identical radii','Their radius depends only on atomic number being odd or even'],`Within a group, atomic radius generally increases as you move downward.`,`The element farther down the group, ${larger.name}, generally has the larger atomic radius.`);},
+ reactivity:(e)=>{if(e.group!==1&&e.group!==17||e.z===1||e.z>54)return null;const peers=members(e).filter(x=>x.z!==1&&x.z<=54);if(!peers.length)return null;
+  const other=rand(peers),higher=moreReactivity(e,other),lower=higher===e?other:e;
+  return shuffledQuestion(e.z,'reactivity','PREDICTING REACTIVITY',`Compare ${e.name} and ${other.name} in Group ${e.group}. Which prediction matches their common group-reactivity trend?`,`${higher.name} is generally more reactive`,[`${lower.name} is generally more reactive`,'Both are always equally reactive','The element with more protons always reacts faster'],`Alkali metals generally become more reactive down their group; halogens generally become more reactive up their group.`,`The common Group ${e.group} trend predicts ${higher.name} is generally more reactive than ${lower.name}.`);},
+ bonds:(e)=>{if(!isMain(e)||e.z===1)return null;const val=e.z===2?2:e.group<=2?e.group:e.group-10;if(e.group===18)return null;
+  return shuffledQuestion(e.z,'bonds','OUTER ELECTRONS & BONDING',`An element in the same main-group column as ${e.name} is examined. Which evidence most strongly supports a prediction that it will show similar chemical behavior?`,'It has a similar outer-electron pattern',[
+ 'It has nearly the same total atomic mass','Its nucleus contains the same number of neutrons','It was discovered in the same century'],`Group patterns reflect electrons in the outermost occupied energy level.`,`Elements in the same main-group column often share valence-electron patterns and therefore have related chemistry.`);},
+ shells20:(e)=>{if(e.z>20||e.z<3)return null;const n=e.z,parts=[];let rest=n;for(const cap of [2,8,8,2]){if(rest>0){const take=Math.min(cap,rest);parts.push(take);rest-=take;}}
+  const target=parts.join('–');const wrong=[...new Set([`${parts[0]}–${n-parts[0]}`,`${n}`,`${parts.join('–')}–1`,[...parts].reverse().join('–'),`${parts[0]}–${parts[1]||0}–${n}`])];
+  return shuffledQuestion(e.z,'shells20','ELECTRON ARRANGEMENT',`In a simplified shell model (first 20 elements), which electron arrangement represents neutral ${e.name} (${n} electrons)?`,target,wrong,`Fill the first shell with up to 2 electrons, then the second with up to 8, then the third for these first-20-element models.`,`The simplified arrangement of ${e.name} is ${target}; its electrons total ${n}.`);},
+ claim:(e)=>{const other=e.group!==0?members(e).filter(x=>x.z!==1):[];if(!other.length||e.z===1)return null;const peer=rand(other);
+  return shuffledQuestion(e.z,'claim','CLAIMS & EVIDENCE',`Two students compare ${e.name} and ${peer.name}. Which claim is supported by their positions in the periodic table?`,'They are in the same group, so they have related periodic patterns',[
+ 'They contain the same total number of protons','They must have exactly the same atomic mass','They are necessarily the same isotope'],`Look for a claim supported by column position rather than identical atomic particles.`,`Both elements are in Group ${e.group}. Their proton counts and masses differ, but their positions reveal a repeating pattern.`);},
+};
+const TIER_QUESTIONS={
+ explorer:['atomic','name','symbol','neutral','neighbor','family','atomic','name','symbol','neutral','neighbor','family'],
+ scientist:['neutral','isotope','atoms','groupAnalogy','family','period','ion','shell','isotopeVsIon','massModel','neighbor','atomic','neutral','atoms','groupAnalogy'],
+ chemist:['ion','isotope','atoms','groupAnalogy','radius','charge','family','massModel','isotopeVsIon','shell','claim','period','neutral','radius','isotope','atoms','groupAnalogy'],
+ master:['ionic','valence','reactivity','radius','isotope','ion','shells20','groupAnalogy','bonds','claim','massModel','charge','family','atoms','isotope','ionic','radius','reactivity','valence','claim']
+};
+const CLUE_QUESTIONS={
+ explorer:['neighbor','family','name','symbol','atomic','neutral','neighbor','family'],
+ scientist:['groupAnalogy','atoms','neutral','isotope','period','ion','family','shell','groupAnalogy'],
+ chemist:['radius','groupAnalogy','ion','isotope','claim','charge','massModel','atoms','radius'],
+ master:['reactivity','ionic','radius','bonds','claim','ion','isotope','valence','shells20','ionic','reactivity']
+};
+function pickTierQuestion(e,clueMode){
+ const keys=(clueMode?CLUE_QUESTIONS:TIER_QUESTIONS)[CFG.level];
+ // Retry with random order, then guaranteed generic atomic structure fallback.
+ for(const key of shuffle(keys)){
+   const generator=modelKinds[key];
+   if(!generator)continue;
+   try {const q=generator(e);if(q){if(clueMode){q.skill=`CLUE ANALYSIS · ${q.skill}`;}return q}} catch(err){console.warn('Skipped invalid',key,e.s,err.message)}
+ }
+ return modelKinds.atomic(e);
+}
+function buildQuestion(e){return pickTierQuestion(e,false)}
+function buildClueQuestion(e){return pickTierQuestion(e,true)}
+
 function onElement(z){
  if(phase==='placement'){place(z);return}
  if(phase!=='playing'||players[active].computer)return;
